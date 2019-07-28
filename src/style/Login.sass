@@ -1,0 +1,101 @@
+@import './Mixin.sass'
+
+.login-page
+  position: fixed
+  top: 0
+  bottom: 0
+  left: 0
+  right: 0
+
+  .login__form
+    height: 100%
+    max-width: 500px
+    background: #fff
+    border-radius: 10px
+    padding: 55px
+    box-sizing: border-box
+
+  .login__title
+    font-size: 30px
+    margin-bottom: 30px
+    font-weight: bold
+    text-align: center
+
+  // verify code dialog
+  .login-verify-code
+    position: fixed
+    left: 0
+    top: 0
+    right: 0
+    bottom: 0
+    background-color: rgba(#000, 0.3)
+    @include hideEffect()
+    &.show
+      @include showEffect()
+  
+  .login-verify-code__content
+    @include centerXY()
+    width: 250px
+    position: absolute
+    z-index: 10
+    background-color: #fff
+    border-radius: 6px
+    padding: 20px
+    box-shadow: 0 0 10px rgba(#000, 0.3)
+
+  .login-verify-code__title
+    font-size: 30px
+    margin-bottom: 30px
+    font-weight: bold
+    text-align: center
+
+  .login-verify-code__background
+    width: 100%
+    height: 100%
+    background: transparent
+
+
+  // login social
+  .login--social
+    margin-top: 40px
+    text-align: center
+
+  .login-social__title
+    margin-bottom: 14px
+    display: block
+  
+  .social-login-item
+    width: 50px
+    height: 50px
+    border-radius: 50%
+    padding: 14px
+    background-color: #ea4335
+    overflow: hidden
+    border-color: transparent
+    img
+      width: 100%
+
+  .copyright
+    position: absolute
+    bottom: 25px
+    @include centerX()
+
+  .copyright__text
+    display: inline-block
+    vertical-align: middle
+    font-size: 14px
+    margin-right: 7px
+    color: #999
+  
+  .heart
+    width: 25px
+    height: 25px
+    vertical-align: middle
+
+  @media screen and (min-width: 768px)
+    background: linear-gradient(45deg, #00dbde, #fc00ff)
+
+    .login__form
+      height: 750px
+      position: relative
+      @include centerXY()
