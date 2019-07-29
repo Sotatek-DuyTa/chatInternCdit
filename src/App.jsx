@@ -56,16 +56,18 @@ class App extends Component {
                       exact={route.exact}
                       path={route.path}
                       render={props => {
-                        let renderComponent;
-                        if (route.requireAuth && !isAuth) {
-                          renderComponent = <Redirect to='/login' />
-                        } else if (route.requireGuest ) {
-                          renderComponent = <Redirect to='/' />
-                        } else {
-                          renderComponent = <route.component />
-                        }
+                        // if (route.requireAuth && !isAuth) {
+                        //   console.log('1');
+                        //   return <Redirect to='/login' />
+                        // }
+                        
+                        // if (route.requireGuest ) {
+                        //   console.log('2');
+                        //   return <Redirect to='/' />
+                        // }
+                        // console.log('3');
 
-                        return renderComponent;
+                        return <route.component />
                       }}
                     />
                   ))
