@@ -24,6 +24,15 @@ export const Login = Loadable(
     // { ...loadBase, ...{ loader: () => import('./Login') } }
 )
 
+export const Register = Loadable(
+    {
+        loader: () => import('./Register'),
+        loading: Loading,
+        // delay: 3000,
+    }
+    // { ...loadBase, ...{ loader: () => import('./Login') } }
+)
+
 export const NotFound = Loadable(
     {
         loader: () => import('./NotFound'),
