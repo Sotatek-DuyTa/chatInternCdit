@@ -41,3 +41,12 @@ export const NotFound = Loadable(
     }
     // { ...loadBase, ...{ loader: () => import('./NotFound') } }
 )
+
+export const Chat = Loadable(
+    {
+        loader: () => import('./Chat'),
+        loading: Loading,
+        // delay: 3000,
+    }
+    // { ...loadBase, ...{ loader: () => import('./NotFound') } }
+)

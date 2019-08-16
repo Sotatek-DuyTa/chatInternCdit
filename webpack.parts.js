@@ -6,7 +6,6 @@ exports.devServer = ({ host, port } = {}) => ({
     host, // Defaults to `localhost`
     port, // Defaults to 8080
     historyApiFallback: true,
-    open: true,
     overlay: true,
   },
 });
@@ -158,7 +157,7 @@ exports.loadJavaScript = ({ include, exclude } = {}) => ({
         exclude: /node_modules/,
         use: {
           loader: "babel-loader"
-        }
+        },
       }
     ]
   },
