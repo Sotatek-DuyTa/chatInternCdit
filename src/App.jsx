@@ -29,7 +29,8 @@ class App extends Component {
         this.setState({
           isAuth: true,
           loading: true
-        })
+        });
+        window.mainUserId = user.uid;
 
         console.log(user.email);
 
@@ -62,16 +63,16 @@ class App extends Component {
                       exact={route.exact}
                       path={route.path}
                       render={props => {
-                        // if (route.requireAuth && !isAuth) {
-                        //   console.log('1');
-                        //   return <Redirect to='/login' />
-                        // }
+                        if (route.requireAuth && !isAuth) {
+                          console.log('1');
+                          return <Redirect to='/login' />
+                        }
                         
                         // if (route.requireGuest ) {
                         //   console.log('2');
                         //   return <Redirect to='/' />
                         // }
-                        // console.log('3');
+                        console.log('3');
 
                         return <route.component />
                       }}

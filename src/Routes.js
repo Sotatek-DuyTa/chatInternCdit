@@ -23,14 +23,16 @@ export const homeRoutes = [
         path: '/login',
         exact: true,
         component: Login,
-        requireGuest: true,
+        // requireGuest: true,
+        requireAuth: false,
     },
     {
         name: 'Register',
         path: '/register',
         exact: true,
         component: Register,
-        requireGuest: true,
+        // requireGuest: false,
+        requireAuth: true,
     },
     {
         name: 'chat',

@@ -7,7 +7,12 @@ import '../style/Login.sass';
 class Login extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      isAuth: false
+    };
+    if (window.mainUserId) {
+      this.setState({ isAuth: true })
+    }
   }
 
   render() {

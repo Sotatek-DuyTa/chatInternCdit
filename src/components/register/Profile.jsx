@@ -7,17 +7,36 @@ class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fullName: "",
+      uid: "",
+      displayName: "",
+      name: "",
       email: "",
       dOB: "",
       avatar: "",
-      role: "",
       gender: "male"
     }
   }
 
-  handleChangeFullname = (e) => {
-    this.setState({fullName: e.target.value});
+  componentDidMount() {
+    if (window.mainUserId) {
+      window.firebase.getUserProfile(window.mainUserId).then(data => {
+        console.log(data.val());
+        if (data.val()) {
+          this.setState({
+            uid: window.mainUserId,
+            displayName: data.val().displayName,
+            name: data.val().name,
+            email: data.val().email,
+            dOB: data.val().dOB,
+            gender: data.val().gender
+          })
+        }
+      });
+    }
+  }
+
+  handleChangeName = (e) => {
+    this.setState({name: e.target.value});
   }
   handleChangeEmail = (e) => {
     this.setState({email: e.target.value});
@@ -25,36 +44,40 @@ class Profile extends Component {
   handleChangeDob = (e) => {
     this.setState({dOB: e.target.value});
   }
-  handleChangeRole = (e) => {
-    this.setState({role: e.target.value});
+  handleChangeDisplayName = (e) => {
+    this.setState({displayName: e.target.value});
   }
   handleChangeGender = (e) => {
     this.setState({gender: e.target.value});
   }
   handleSubmit = (event) => {
-    firebase.database().ref('users/').push({
-      fullName: this.state.fullName,
-      email: this.state.email,
-      dOB: this.state.dOB,
-      avatar: this.state.avatar,
-      role: this.state.role,
-      gender: this.state.gender
-    })
+    event.preventDefault();
+    window.firebase.createUserProfile(this.state);
   }
 
   render() {
     return (
       <div className="login--normal">
         <div className="user-profile">
-          <form onSubmit={this.handleSubmit()}>
+          <form onSubmit={e => {this.handleSubmit(e)}}>
             <div className="user-profile__fullname theme__input-item">
               <div className="theme-label--primary"> Full Name</div>
               <input 
                 type="text" 
                 name="fullname" 
                 className="theme-input--primary"
-                value={this.state.fullName} 
+                value={this.state.name} 
                 onChange={this.handleChangeFullname}/>
+              <div className="theme__input-border"></div>
+            </div>
+            <div className="user-profile__display-name theme__input-item">
+              <div className="theme-label--primary">Display Name</div>
+              <input
+                type="text" 
+                name="displayname"
+                className="theme-input--primary"
+                value={this.state.displayName} 
+                onChange={this.handleChangeDisplayName}/>
               <div className="theme__input-border"></div>
             </div>
             <div className="user-profile__email theme__input-item">
@@ -75,16 +98,6 @@ class Profile extends Component {
                 className="theme-input--primary"
                 value={this.state.dOB} 
                 onChange={this.handleChangeDob}/>
-              <div className="theme__input-border"></div>
-            </div>
-            <div className="user-profile__role theme__input-item">
-              <div className="theme-label--primary">Role</div>
-              <input
-                type="text" 
-                name="role"
-                className="theme-input--primary"
-                value={this.state.role} 
-                onChange={this.handleChangeRole}/>
               <div className="theme__input-border"></div>
             </div>
             <div className="user-profile__gender theme__input-item">
