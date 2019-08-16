@@ -1,6 +1,7 @@
 import { 
     Home, 
     Login,
+    Register,
     NotFound,
     // Chat,
 } from './pages/Loadable';
@@ -22,7 +23,16 @@ export const homeRoutes = [
         path: '/login',
         exact: true,
         component: Login,
-        requireGuest: true,
+        // requireGuest: true,
+        requireAuth: false,
+    },
+    {
+        name: 'Register',
+        path: '/register',
+        exact: true,
+        component: Register,
+        // requireGuest: false,
+        requireAuth: true,
     },
     {
         name: 'chat',
