@@ -24,11 +24,11 @@ class Profile extends Component {
         if (data.val()) {
           this.setState({
             uid: window.mainUserId,
-            displayName: data.val().displayName,
-            name: data.val().name,
-            email: data.val().email,
-            dOB: data.val().dOB,
-            gender: data.val().gender
+            displayName: data.val().displayName || '',
+            name: data.val().name || '',
+            email: data.val().email || '',
+            dOB: data.val().dOB || '',
+            gender: data.val().gender || ''
           })
         }
       });
@@ -53,6 +53,8 @@ class Profile extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     window.firebase.createUserProfile(this.state);
+
+    localStorage.setItem('userProfile', 'true');
   }
 
   render() {

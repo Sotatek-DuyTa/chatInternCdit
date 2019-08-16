@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { SidebarContextWrapper } from './ChatContext';
+import Avatar from '../../../assets/images/blank-avatar.svg';
 
 // Sidebar.contextType = ChatContext;
 
@@ -32,7 +33,7 @@ class Sidebar extends Component {
 
               {/* avatar */}
               <div className="profile__avatar">
-                <img src="http://unsplash.it/300/300" alt={userData.name} />
+                <img src={ userData.avatar || Avatar } alt={userData.name} />
               </div>
 
               {/* name */}
@@ -47,7 +48,7 @@ class Sidebar extends Component {
         <div className="sidebar__chat-connection"></div>
         {/* channel */}
         <div className="sidebar__channel">
-          <p className="sidebar__channel-title">Channels</p>
+          <p className="sidebar__channel-title">Channels <button onClick={this.props.toggleSelectBox} className="create-channel-btn">+</button></p>
           <div className="sidebar__channel-group">
             {
               channels.map((channel, index) => (
@@ -67,7 +68,7 @@ class Sidebar extends Component {
               friends.map((friend, index) => (
                 <div className="sidebar__channel-item notify" key={index} onClick={ () => {updateCurrentConnector(friend)} }>
                   <span className={`status ${ _.indexOf(listOnline, friend.uid) !== -1 ? 'online' : '' }`}></span>
-                  <p className="name">{friend.name}</p>
+                  <p className="name">{friend.displayName}</p>
                 </div>
               ))
             }

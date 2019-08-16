@@ -17,6 +17,7 @@ export class SidebarContextProvider extends Component {
     },
     currentConnector: null,
     listOnline: [],
+    isShowAddUserSelectBox: false,
   }
 
   setListOnline = listOnline => {
@@ -29,6 +30,16 @@ export class SidebarContextProvider extends Component {
       channels.push(channel);
       return { channels };
     })
+  }
+
+  toggleSelectBox = () => {
+    this.setState(prevState =>({
+      isShowAddUserSelectBox: !prevState.isShowAddUserSelectBox
+    }))
+  }
+
+  closeSelectBox = () => {
+    this.setState({ isShowAddUserSelectBox: false })
   }
 
   updateCurrentConnector = (connector) => {
@@ -63,8 +74,10 @@ export class SidebarContextProvider extends Component {
     const {
       updateCurrentConnector,
       setListOnline,
+      toggleSelectBox,
+      closeSelectBox,
     } = this;
-    const data = { ...this.state, ...{ updateCurrentConnector, setListOnline } }
+    const data = { ...this.state, ...{ updateCurrentConnector, setListOnline, toggleSelectBox, closeSelectBox } }
 
     return (
       <SidebarContext.Provider value={data}>

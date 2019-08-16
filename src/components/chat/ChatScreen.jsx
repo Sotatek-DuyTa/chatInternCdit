@@ -5,6 +5,7 @@ import SelectBox from './SelectBox';
 var moment = require('moment');
 window.moment = moment;
 import 'antd/dist/antd.css'
+import Avatar from '../../../assets/images/blank-avatar.svg';
 
 
 // let mqttClient = new MQTTClient;
@@ -22,7 +23,6 @@ class ChatScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isShowAddUserSelectBox: true,
       currentConnectorMessage: [],
       channels: []
     };
@@ -53,7 +53,7 @@ class ChatScreen extends Component {
     }
 
     //channel
-    if(payload.topic === "creatChannel") {
+    if (payload.topic === "creatChannel") {
       // console.log(payload);
       if (payload.listUserData[this.props.userData.uid]) {
         this.addChannels({
@@ -85,14 +85,14 @@ class ChatScreen extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if ( nextProps.currentConnector && (!this.props.currentConnector  || (this.props.currentConnector.uid !== nextProps.currentConnector.uid))) {
+    if (nextProps.currentConnector && (!this.props.currentConnector || (this.props.currentConnector.uid !== nextProps.currentConnector.uid))) {
       console.log('-------------------');
       window.firebase.getAllMessage(nextProps.userData.uid).then(data => {
-        const listMessage = _.map((data.val())[nextProps.currentConnector.uid] , (val, key) => ({ ...val, ...{ timestamp: key } }));
+        const listMessage = _.map((data.val())[nextProps.currentConnector.uid], (val, key) => ({ ...val, ...{ timestamp: key } }));
         // (data.val())[nextProps.currentConnector.uid];
         console.log('nextProps.currentConnector.uid', nextProps.currentConnector.uid);
         console.log('listMessage', data.val());
-        this.setState({ 
+        this.setState({
           currentConnectorMessage: listMessage
         });
       })
@@ -153,62 +153,66 @@ class ChatScreen extends Component {
   }
 
   render() {
-    const { allUser, currentConnector, friends } = this.props;
-    const { currentConnectorMessage, isShowAddUserSelectBox } = this.state;
+    const { allUser, currentConnector, isShowAddUserSelectBox, listOnline, friends } = this.props;
+    const { currentConnectorMessage } = this.state;
 
     console.log('chatscreen', this.props);
 
     return (
       <div className="chat-area">
         {
-          currentConnector && allUser ? (
-            <>
-              <div className="chat-area__title">
-                <p className="user__name">{`${currentConnector.displayName}(${currentConnector.name})`}</p>
-                <div className="user__status">
-                  <span className="status status--02"></span>
-                  <span className="status-text"></span>
-                </div>
-              </div>
-
-              {/* chatconent */}
-              <div className="chat-area__content">
-                {/* message list */}
-                <div className="chat-area__message-list">
-                  {
-                    currentConnectorMessage.map((message, index) => (
-                      <div className="chat-area__message-item" key={index}>
-                        <div className="user__avatar">
-                          <img src="http://unsplash.it/50/50" alt="dummy" className="user__avatar-img" />
-                        </div>
-                        <div className="message__content-wrapper">
-                          <p className="user__name">{`${allUser[message.uid].name}(${allUser[message.uid].displayName})`}</p>
-                          <p className="message__content">{message.content}</p>
-                        </div>
-                      </div>
-                    ))
-                  }
-                </div>
-              </div>
-
-              {/* input text */}
-              <div className="chat-area__input">
-                <div className="chat-area__input-box">
-                  <input type="text" placeholder="Message to " onKeyPress={this.enterToSendMessage} name="input-box" id="" ref={this.message} />
-                </div>
-              </div>
-
-              {
-                isShowAddUserSelectBox && (
-                  <div className="selecbox-wrapper">
-                    <SelectBox users={friends} submit={(listUser, name) => {this.creatChannel(listUser, name)}} />
+          <>
+            {
+              currentConnector && allUser ? (
+                <>
+                  <div className="chat-area__title">
+                    <p className="user__name">{`${currentConnector.displayName}(${currentConnector.name})`}</p>
+                    <div className="user__status">
+                      <span className={`status status--02 ${ _.indexOf(listOnline, friend.uid) !== -1 ? 'online' : '' }`}></span>
+                      <span className="status-text"></span>
+                    </div>
                   </div>
+
+                  {/* chatconent */}
+                  <div className="chat-area__content">
+                    {/* message list */}
+                    <div className="chat-area__message-list">
+                      {
+                        currentConnectorMessage.map((message, index) => (
+                          <div className="chat-area__message-item" key={index}>
+                            <div className="user__avatar">
+                              <img src={allUser[message.uid].avatar || Avatar} alt="dummy" className="user__avatar-img" />
+                            </div>
+                            <div className="message__content-wrapper">
+                              <p className="user__name">{`${allUser[message.uid].name}(${allUser[message.uid].displayName})`}</p>
+                              <p className="message__content">{message.content}</p>
+                            </div>
+                          </div>
+                        ))
+                      }
+                    </div>
+                  </div>
+
+                  {/* input text */}
+                  <div className="chat-area__input">
+                    <div className="chat-area__input-box">
+                      <input type="text" placeholder="Message to " onKeyPress={this.enterToSendMessage} name="input-box" id="" ref={this.message} />
+                    </div>
+                  </div>
+                </>
+              ) : (
+                  <h2 className="hello">Hello to Chat page</h2>
                 )
-              }
-            </>
-          ) : (
-              <p>hello</p>
-            )
+
+            }
+            {
+              isShowAddUserSelectBox && (
+                <div className="selecbox-wrapper">
+                  <SelectBox users={friends} submit={(listUser, name) => { this.creatChannel(listUser, name) }} />
+                </div>
+              )
+            }
+          </>
         }
       </div>
     )

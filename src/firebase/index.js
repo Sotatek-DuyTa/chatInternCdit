@@ -51,7 +51,8 @@ export default class BeeFirebase {
   }
 
   createUserProfile = (user) => {
-    this.firebase.database().ref(`user/${user.uid}`).set({
+    let uid = this.getUserId();
+    this.firebase.database().ref(`user/${uid}`).set({
       name: user.name,
       displayName: user.displayName,
       email: user.email,
