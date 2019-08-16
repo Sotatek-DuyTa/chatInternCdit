@@ -32,7 +32,7 @@ class PhoneLogin extends Component {
     firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
       .then((confirmationResult) => {
         // SMS sent. Prompt user to type the code from the message, then sign the
-        // user in with confirmationResult.confirm(code).
+        // user in with conffirmationResult.confirm(code).
         this.setState({
           isHideCaptcha: true,
           isShowVerifyDialog: true,
@@ -83,7 +83,7 @@ class PhoneLogin extends Component {
           onSubmit={(values, { setSubmitting }) => {
             setTimeout(() => {
               console.log(values);
-              this.getVerifyCode(values.phoneNumber);
+              this.getVerifyCode(`+84${values.phoneNumber}`);
               setSubmitting(false);
             }, 400);
           }}

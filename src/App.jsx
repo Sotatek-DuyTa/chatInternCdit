@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect, Link } from 'react-router-dom';
 import { homeRoutes } from './Routes';
-import initFirebase from './firebase';
+import BeeFirebase from './firebase';
 import Auth from './components/authentication';
 import * as firebase from 'firebase';
 import Loading from './components/loading';
+const _ = require('lodash');
+
 // import loadable from 'react-loadable';
 // import Loading from './components/loading';
+
+window.firebase = new BeeFirebase;
+window.firebase.initApp();
+window._ = _;
 
 class App extends Component {
   constructor(props) {
@@ -17,17 +23,17 @@ class App extends Component {
     };
   }
 
-  componentWillMount() {
-    initFirebase();
-  }
-
   componentDidMount() {
-    firebase.auth().onAuthStateChanged((user) => {
+    window.firebase.getFirebase().auth().onAuthStateChanged((user) => {
       if (user) {
         this.setState({
           isAuth: true,
           loading: true
         })
+
+        console.log(user.email);
+
+        console.log( window.firebase.getUserId());
       } else {
         this.setState({
           isAuth: false,

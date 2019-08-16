@@ -1,0 +1,26 @@
+@import './ChatArea.sass'
+@import './Sidebar.sass'
+
+.chat-page
+  display: table
+  height: 100vh
+  width: 100%
+  position: fixed
+  top: 0
+  left: 0
+
+  .status
+    display: inline-block
+    width: 7px
+    height: 7px
+    border-radius: 50%
+    border: thin solid #fff
+    background-color: transparent
+    transition: all 0.3s ease-in-out
+    margin-right: 7px
+    vertical-align: middle
+    &.online
+      background-color: #2BAC76
+      border-color: #2BAC76
+    &.status--02
+      border-color: #616061

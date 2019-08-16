@@ -21,7 +21,7 @@ class Auth extends Component {
 
         this.props.auth = true;
 
-        console.log(user);
+        console.log(user.email);
       } else {
         this.setState({
           auth: false,

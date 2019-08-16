@@ -1,11 +1,12 @@
 import { 
     Home, 
     Login,
-    NotFound, 
+    NotFound,
+    // Chat,
 } from './pages/Loadable';
 
 // import Login from './pages/Login';
-// import Home from './pages/Home';
+import Chat from './pages/Chat';
 // import NotFound from './pages/NotFound';
 
 export const homeRoutes = [
@@ -22,6 +23,13 @@ export const homeRoutes = [
         exact: true,
         component: Login,
         requireGuest: true,
+    },
+    {
+        name: 'chat',
+        path: '/chat',
+        exact: true,
+        component: Chat,
+        requireAuth: true,
     },
     {
         name: '404',
