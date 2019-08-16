@@ -20,5 +20,33 @@ export default class BeeFirebase {
 
   getAllUser = () => this.firebase.database().ref('user').once('value');
 
-  getAllMessage = (uid) => this.firebase.database().ref(`message/${uid}`).once('value'); 
+  getAllMessage = (uid) => this.firebase.database().ref(`message/${uid}`).once('value');
+
+  makeid =(length = 10) => {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+ }
+
+  createChannel = (listUser, name) => {
+    let uid = this.getUserId();
+    let randomName = this.makeid();
+
+    this.firebase.database().ref(`channels/${randomName}`).set({
+      name: name
+    });
+
+    this.firebase.database().ref(`users/${uid}/channels/${randomName}`).set({
+      name: name
+    })
+
+    return this.firebase.database().ref(`channels/${randomName}/users`).set({
+      ...listUser
+    })
+    // return new Promise(res => {setTimeout(res, 100)});
+  }
 }

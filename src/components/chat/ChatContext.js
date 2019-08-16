@@ -23,6 +23,14 @@ export class SidebarContextProvider extends Component {
     this.setState({ listOnline });
   }
 
+  addChannels = channel => {
+    this.props.setChannels(prevState => {
+      let channels = prevState.channels;
+      channels.push(channel);
+      return { channels };
+    })
+  }
+
   updateCurrentConnector = (connector) => {
     this.setState({ currentConnector: connector })
   }

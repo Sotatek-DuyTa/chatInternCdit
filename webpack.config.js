@@ -29,6 +29,7 @@ const commonConfig = merge([
   // parts.loadHtml(),
   parts.loadSCSS(path.join(__dirname, "src/test.scss")),
   parts.loadPostCss(),
+  parts.loadLESS(),
   parts.loadFile(),
   parts.loadUrl(),
   // parts.loadSvg(),

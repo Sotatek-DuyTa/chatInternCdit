@@ -4,6 +4,9 @@ import Sidebar from '../components/chat/Sidebar';
 import { SidebarContextProvider } from '../components/chat/ChatContext';
 import ChatScreen from '../components/chat/ChatScreen';
 import '../style/Chat.sass';
+import {
+  withRouter
+} from 'react-router-dom'
 
 // const mqttClientSetting = {
 //   hostname: process.env.mqtt_host || 'localhost',
@@ -16,6 +19,16 @@ class Chat extends Component {
     // this.state = {
     //   client: {}
     // }
+  }
+
+  componentDidMount() {
+    if(!localStorage.getItem('userData')) {
+      this.props.history.push('/login');
+    }
+
+    if(!localStorage.getItem('userProfile')) {
+      this.props.history.push('/register');
+    }
   }
 
   // componentDidMount() {
@@ -80,4 +93,4 @@ class Chat extends Component {
   }
 }
 
-export default Chat;
+export default withRouter(Chat);

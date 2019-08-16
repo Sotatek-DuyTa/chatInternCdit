@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { SidebarContextWrapper } from './ChatContext';
 import MQTTClient from './MQTTClient';
+import SelectBox from './SelectBox';
 var moment = require('moment');
 window.moment = moment;
+import 'antd/dist/antd.css'
 
 
 // let mqttClient = new MQTTClient;
@@ -20,7 +22,9 @@ class ChatScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentConnectorMessage: []
+      isShowAddUserSelectBox: true,
+      currentConnectorMessage: [],
+      channels: []
     };
 
     this.message = React.createRef();
@@ -46,7 +50,17 @@ class ChatScreen extends Component {
       const currentConnectorMessage = this.state.currentConnectorMessage;
       currentConnectorMessage.push(newMessage);
       this.setState({ currentConnectorMessage });
+    }
 
+    //channel
+    if(payload.topic === "creatChannel") {
+      // console.log(payload);
+      if (payload.listUserData[this.props.userData.uid]) {
+        this.addChannels({
+          name: payload.name,
+          users: listUserData
+        })
+      }
     }
   }
 
@@ -58,6 +72,7 @@ class ChatScreen extends Component {
         window.hasMqttClient = true;
         mqttClient.subscribeTopic(`message/${nextProps.userData.uid}/#`); // listen all message
         mqttClient.subscribeTopic('listOnline'); // listen new user status (onl or off)
+        mqttClient.subscribeTopic('createChannel'); // listen new channel
       }
 
       let message = {
@@ -84,8 +99,39 @@ class ChatScreen extends Component {
     }
   }
 
-  sendMsg = () => {
-    this.mqttClient.sendMsg(this.topic.current.value, this.message.current.value);
+  // sendMsg = () => {
+  //   this.mqttClient.sendMsg(this.topic.current.value, this.message.current.value);
+  // }
+
+  creatChannel = (listUser, name) => {
+    console.log(listUser);
+    const listUserData = {};
+    listUser.forEach((uid) => {
+      if (this.props.allUser[uid]) {
+        listUserData[uid] = this.props.allUser[uid]
+      }
+    })
+
+
+    // for (const key of yourArray) {
+    //      obj[key] = whatever;
+    // }
+
+    // const listUserData = _.map(listUser, uid => {
+    //   const obj = {};
+    //   obj[uid] = { ...this.props.allUser[uid], ...{uid} };
+    //   return obj;
+    // });
+    listUserData[this.props.userData.uid] = this.props.userData;
+    console.log(listUserData);
+    window.firebase.createChannel(listUserData, name).then(() => {
+      const message = {
+        name: name,
+        listUserData,
+      }
+
+      window.mqttClient.sendMsg('createChannel', JSON.stringify(message));
+    })
   }
 
   enterToSendMessage = (event) => {
@@ -107,8 +153,8 @@ class ChatScreen extends Component {
   }
 
   render() {
-    const { allUser, currentConnector } = this.props;
-    const { currentConnectorMessage } = this.state;
+    const { allUser, currentConnector, friends } = this.props;
+    const { currentConnectorMessage, isShowAddUserSelectBox } = this.state;
 
     console.log('chatscreen', this.props);
 
@@ -151,6 +197,14 @@ class ChatScreen extends Component {
                   <input type="text" placeholder="Message to " onKeyPress={this.enterToSendMessage} name="input-box" id="" ref={this.message} />
                 </div>
               </div>
+
+              {
+                isShowAddUserSelectBox && (
+                  <div className="selecbox-wrapper">
+                    <SelectBox users={friends} submit={(listUser, name) => {this.creatChannel(listUser, name)}} />
+                  </div>
+                )
+              }
             </>
           ) : (
               <p>hello</p>

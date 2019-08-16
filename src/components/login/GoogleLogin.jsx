@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
 import GoogleLogo from '../../../assets/images/google-logo.svg';
+import {
+  withRouter
+} from 'react-router-dom'
 
 class GoogleLogin extends Component {
   constructor(props) {
@@ -9,6 +12,10 @@ class GoogleLogin extends Component {
   }
 
   componentDidMount() {
+    if (localStorage.getItem('userData')) {
+      this.props.history.push('/chat');
+    }
+
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
         // User is signed in.
@@ -21,18 +28,19 @@ class GoogleLogin extends Component {
   }
 
   handleClick = () => {
-
     var provider = new firebase.auth.GoogleAuthProvider();
     provider.addScope('https://www.googleapis.com/auth/userinfo.email');
     // firebase.auth().languageCode = 'vn';
     firebase.auth().useDeviceLanguage();
 
-    firebase.auth().signInWithPopup(provider).then(function (result) {
+    firebase.auth().signInWithPopup(provider).then((result) => {
       // This gives you a Google Access Token. You can use it to access the Google API.
       var token = result.credential.accessToken;
       // The signed-in user info.
       var user = result.user;
+      localStorage.setItem('userData', user.uid);
 
+      this.props.history.push('/register');
       console.log(user);
       console.log(token);
 
@@ -97,4 +105,4 @@ class GoogleLogin extends Component {
   }
 }
 
-export default GoogleLogin;
+export default withRouter(GoogleLogin);

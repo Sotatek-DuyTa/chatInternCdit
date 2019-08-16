@@ -59,6 +59,31 @@ exports.loadSCSS = ({ include, exclude } = {}) => ({
   }
 });
 
+// setup load less
+exports.loadLESS = ({ include, exclude } = {}) => ({
+  module: {
+    rules: [
+      {
+        test: /\.less$/,
+        include,
+        exclude,
+
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              // publicPath: '../',
+              hmr: process.env.NODE_ENV === 'development',
+            },
+          },
+          "style-loader",
+          "css-loader",
+          "less-loader"],
+      }
+    ]
+  }
+});
+
 // setup load html
 exports.loadHtml = () => ({
   module: {

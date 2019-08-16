@@ -3,6 +3,9 @@ import * as firebase from 'firebase';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { loginPhoneValidate, verifyCodeValidate } from '../../common/validatorFormik';
 // import enhanceWithClickOutside from 'react-click-outside';
+import {
+  withRouter
+} from 'react-router-dom'
 
 class PhoneLogin extends Component {
   constructor(props) {
@@ -22,7 +25,9 @@ class PhoneLogin extends Component {
     //     onSignInSubmit();
     //   }
     // });
-
+    if (localStorage.getItem('userData')) {
+      this.props.history.push('/chat');
+    }
     window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
   }
 
@@ -55,11 +60,14 @@ class PhoneLogin extends Component {
 
   loginHandle = (verifyCode) => {
     console.log(verifyCode);
-    this.state.confirmationResult.confirm(verifyCode + '').then(function (result) {
+    this.state.confirmationResult.confirm(verifyCode + '').then( (result) => {
       // User signed in successfully.
       var user = result.user;
       console.log(user);
-      // ...
+
+      localStorage.setItem('userData', user.uid);
+
+      this.props.history.push('/register');
     }).catch(function (error) {
       console.log(error);
       // User couldn't sign in (bad verification code?)
@@ -150,4 +158,4 @@ class PhoneLogin extends Component {
   }
 }
 
-export default PhoneLogin;
+export default withRouter(PhoneLogin);

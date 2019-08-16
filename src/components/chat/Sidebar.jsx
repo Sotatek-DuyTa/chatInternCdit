@@ -7,7 +7,8 @@ class Sidebar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isShowSetting: false
+      isShowSetting: false,
+      channels: []
     };
   }
 
@@ -51,7 +52,7 @@ class Sidebar extends Component {
             {
               channels.map((channel, index) => (
                 <div className="sidebar__channel-item" key={index}>
-                  <p className="name">{channel}</p>
+                  <p className="name">{channel.name}</p>
                 </div>
               ))
             }
